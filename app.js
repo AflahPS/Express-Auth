@@ -10,8 +10,15 @@ app.set("view engine", "ejs");
 const productsJson = fs.readFileSync("./JSON/new.json");
 const productsData = JSON.parse(productsJson);
 
+// Database
+const users = [
+  { id: 1, name: "admin", email: "admin@brand.com", password: "123456" },
+  { id: 2, name: "boss", email: "boss@brand.com", password: "123456" },
+  { id: 3, name: "master", email: "master@brand.com", password: "123456" },
+];
+
 // Handlers and functions declarations
-function renderer(res, route) {
+function renderer(res,req, route) {
   const nav = [
     { path: "/home", title: "HOME", style: "/home.css" },
     { path: "/products", title: "PRODUCTS", style: "/products.css" },
@@ -23,25 +30,11 @@ function renderer(res, route) {
     title: `${route[0].toUpperCase() + route.slice(1)}`,
     nav,
     message: "",
-    productsData,
+    user: users[req.session.userID-1],
+    productsData
   };
   res.render(route, renderObject);
 }
-
-const cacheClear = (res) => {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-}
-
-// Variable declarations
-const hourInMS = 1000 * 60 * 60;
-const cookieAge = 2 * hourInMS;
-const sessId = "sid";
-
-const users = [
-  { id: 1, name: "admin", email: "admin@brand.com", password: "123456" },
-  { id: 2, name: "boss", email: "boss@brand.com", password: "123456" },
-  { id: 3, name: "master", email: "master@brand.com", password: "123456" },
-];
 
 const redirectLogin = (req, res, next) => {
   if (!req.session.userID) {
@@ -58,6 +51,15 @@ const redirectHome = (req, res, next) => {
     next();
   }
 };
+
+const cacheClear = (res) => {
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+}
+
+// Variable declarations
+const hourInMS = 1000 * 60 * 60;
+const cookieAge = 2 * hourInMS;
+const sessId = "sid";
 
 // Middlewares
 app.use(morgan("dev"));
@@ -87,28 +89,28 @@ app.get("/", (req, res) => {
   const { userID } = req.session;
 
   if (!userID) {
-    renderer(res, "signin");
+    renderer(res,req, "signin");
   } else {
-    renderer(res, "home");
+    renderer(res,req, "home");
   }
 });
 
 app.get("/home", redirectLogin, (req, res) => {
   cacheClear(res);
   res.status(200);
-  renderer(res, "home");
+  renderer(res,req, "home");
 });
 
 app.get("/products", redirectLogin, (req, res) => {
   cacheClear(res);
   res.status(200);
-  renderer(res, "products");
+  renderer(res,req, "products");
 });
 
 app.get("/about", redirectLogin, (req, res) => {
   cacheClear(res);
   res.status(200);
-  renderer(res, "about");
+  renderer(res,req, "about");
 });
 
 
@@ -172,7 +174,7 @@ app.post("/signout", redirectLogin, (req, res) => {
 
 app.use((req, res) => {
   res.status(404);
-  renderer(res, "404");
+  renderer(res,req, "404");
 });
 
 // Listener

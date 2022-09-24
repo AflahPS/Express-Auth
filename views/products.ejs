@@ -5,23 +5,23 @@
 <body>
   <div class="container-fluid main-cont">
     <%- include('./partials/nav.ejs') %>
-    <h1>Products</h1>
+    <h1 class="text-center mb-5">Products</h1>
 
 
     <div class="container text-center">
       <div class="row">
         <% productsData.products.forEach(el=>{ %>
-        <div class="col-3">
+        <div class="col-3 mb-3">
 
-          <div class="card" style="width: 18rem;">
-            <img src=<%= el.thumbnail %> class="card-img-top" alt="...">
+          <div class="card" >
+            <img src=<%= el.images[0] %> class="card-img-top card-img" alt="...">
             <div class="card-body">
               <h5 class="card-title"><%= el.title %> </h5>
               <p class="card-text"> <%= el.description %> </p>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">Price : <%= el.price*70 %> </li>
-              <li class="list-group-item">Rating : <%= el.rating %></li>
+              <li class="list-group-item">Price : Rs.<%= el.price*70 %> </li>
+              <li class="list-group-item">Rating : <%= el.rating %>/5</li>
 
             </ul>
             <div class="card-body">
@@ -38,8 +38,9 @@
 
 
 
-    <%- include('./partials/footer.ejs') %>
+    
   </div>
+  <%- include('./partials/footer.ejs') %>
 </body>
 
 </html>
