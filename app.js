@@ -28,6 +28,10 @@ function renderer(res, route) {
   res.render(route, renderObject);
 }
 
+const cacheClear = (res) => {
+  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+}
+
 // Variable declarations
 const hourInMS = 1000 * 60 * 60;
 const cookieAge = 2 * hourInMS;
@@ -76,7 +80,7 @@ app.use(
 );
 app.use(express.static(__dirname + "/public"));
 
-// Routers
+// Routers-Getters
 
 app.get("/", (req, res) => {
   res.status(200);
@@ -90,19 +94,25 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", redirectLogin, (req, res) => {
+  cacheClear(res);
   res.status(200);
   renderer(res, "home");
 });
 
 app.get("/products", redirectLogin, (req, res) => {
+  cacheClear(res);
   res.status(200);
   renderer(res, "products");
 });
 
 app.get("/about", redirectLogin, (req, res) => {
+  cacheClear(res);
   res.status(200);
   renderer(res, "about");
 });
+
+
+// Routers-Posters
 
 app.post("/register", redirectHome, (req, res) => {
   const { name, email, password } = req.body;
@@ -158,10 +168,14 @@ app.post("/signout", redirectLogin, (req, res) => {
   });
 });
 
+// 404-Error
+
 app.use((req, res) => {
   res.status(404);
   renderer(res, "404");
 });
+
+// Listener
 
 const port = 7000;
 app.listen(port, () => {
