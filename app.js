@@ -2,18 +2,20 @@ const express = require("express");
 const ejs = require("ejs");
 const morgan = require("morgan");
 const session = require("express-session");
+const fs = require("fs");
 
 const app = express();
 app.set("view engine", "ejs");
+
+const productsJson = fs.readFileSync("./JSON/new.json");
+const productsData = JSON.parse(productsJson);
 
 // Handlers and functions declarations
 function renderer(res, route) {
   const nav = [
     { path: "/home", title: "HOME", style: "/home.css" },
     { path: "/products", title: "PRODUCTS", style: "/products.css" },
-    { path: "/signin", title: "SIGN-IN", style: "/signin.css" },
     { path: "/about", title: "ABOUT", style: "/about.css" },
-    { path: "/register", title: "REGISTER", style: "/register.css" },
   ];
 
   const renderObject = {
@@ -21,6 +23,7 @@ function renderer(res, route) {
     title: `${route[0].toUpperCase() + route.slice(1)}`,
     nav,
     message: "",
+    productsData,
   };
   res.render(route, renderObject);
 }
@@ -29,12 +32,6 @@ function renderer(res, route) {
 const hourInMS = 1000 * 60 * 60;
 const cookieAge = 2 * hourInMS;
 const sessId = "sid";
-const nav = [
-  { path: "/home", title: "HOME", style: "/home.css" },
-  { path: "/products", title: "PRODUCTS", style: "/products.css" },
-
-  { path: "/about", title: "ABOUT", style: "/about.css" },
-];
 
 const users = [
   { id: 1, name: "admin", email: "admin@brand.com", password: "123456" },
@@ -107,19 +104,6 @@ app.get("/about", redirectLogin, (req, res) => {
   renderer(res, "about");
 });
 
-/*
-app.get("/register", (req, res) => {
-  res.status(200);
-  renderer(res, "register");
-});
-
-app.get("/signin", redirectHome, (req, res) => {
-  res.status(200);
-
-  renderer(res, "signin");
-});
-*/
-
 app.post("/register", redirectHome, (req, res) => {
   const { name, email, password } = req.body;
 
@@ -178,7 +162,6 @@ app.use((req, res) => {
   res.status(404);
   renderer(res, "404");
 });
-
 
 const port = 7000;
 app.listen(port, () => {
