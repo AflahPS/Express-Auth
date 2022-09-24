@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg bg-secondary">
+  <div class="container-fluid d-flex">
+    <div class="nav-lt">
+      <a class="navbar-brand" href="/home">Brand</a>
+    </div>
+
+    <div class="nav-rt">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+          <% nav.forEach(obj=>{ %>
+          <li class="nav-item ">
+            <a class="nav-link active" aria-current="page" href=<%=obj.path %>><%= obj.title %> </a>
+          </li>
+          <% }) %>
+          
+
+
+        </ul>
+        <form action="/signout" method="post">
+          <input type="submit" value="Log Out">
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>
