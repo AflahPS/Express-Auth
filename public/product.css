@@ -1,0 +1,19 @@
+.carousel-item img{
+  margin: auto;
+}
+
+.prod-buttons{
+  gap: 3rem;
+}
+
+.carousel-nxt{
+  background-color: rgba(70, 66, 66, 0.356);
+}
+
+.carousel-pvs{
+  background-color: rgba(70, 66, 66, 0.356);
+}
+
+body{
+  background-color: rgb(230, 205, 68);
+}

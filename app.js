@@ -9,7 +9,7 @@ app.set("view engine", "ejs");
 
 const productsJson = fs.readFileSync("./JSON/new.json");
 const productsData = JSON.parse(productsJson);
-
+let PID = null;
 // Database
 const users = [
   { id: 1, name: "admin", email: "admin@brand.com", password: "123456" },
@@ -18,7 +18,7 @@ const users = [
 ];
 
 // Handlers and functions declarations
-function renderer(res,req, route) {
+function renderer(req, res, route) {
   const nav = [
     { path: "/home", title: "HOME", style: "/home.css" },
     { path: "/products", title: "PRODUCTS", style: "/products.css" },
@@ -29,9 +29,9 @@ function renderer(res,req, route) {
     style: `/${route}.css`,
     title: `${route[0].toUpperCase() + route.slice(1)}`,
     nav,
-    message: "",
-    user: users[req.session.userID-1],
-    productsData
+    PID,
+    user: users[req.session.userID - 1],
+    productsData,
   };
   res.render(route, renderObject);
 }
@@ -53,8 +53,11 @@ const redirectHome = (req, res, next) => {
 };
 
 const cacheClear = (res) => {
-  res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-}
+  res.header(
+    "Cache-Control",
+    "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+  );
+};
 
 // Variable declarations
 const hourInMS = 1000 * 60 * 60;
@@ -89,32 +92,58 @@ app.get("/", (req, res) => {
   const { userID } = req.session;
 
   if (!userID) {
-    renderer(res,req, "signin");
+    renderer(req, res, "signin");
   } else {
-    renderer(res,req, "home");
+    renderer(req, res, "home");
   }
 });
 
 app.get("/home", redirectLogin, (req, res) => {
   cacheClear(res);
   res.status(200);
-  renderer(res,req, "home");
+  renderer(req, res, "home");
 });
 
 app.get("/products", redirectLogin, (req, res) => {
   cacheClear(res);
   res.status(200);
-  renderer(res,req, "products");
+  renderer(req, res, "products");
 });
 
 app.get("/about", redirectLogin, (req, res) => {
   cacheClear(res);
   res.status(200);
-  renderer(res,req, "about");
+  renderer(req, res, "about");
 });
 
+app.get("/product/:id", redirectLogin, (req, res) => {
+  cacheClear(res);
+  res.status(200);
+  PID = req.params.id * 1;
+  const product = productsData.products.find((el) => el.id === PID);
+  if (product) {
+    return renderer(req, res, "product");
+  }
+  res.redirect("/home");
+});
 
 // Routers-Posters
+
+app.post("/signin", redirectHome, (req, res) => {
+  const { email, password } = req.body;
+
+  if (email && password) {
+    const user = users.find(
+      (el) => el.email === email && el.password === password
+    );
+    if (user) {
+      req.session.userID = user.id;
+      return res.redirect("/home");
+    }
+  }
+
+  res.redirect("/");
+});
 
 app.post("/register", redirectHome, (req, res) => {
   const { name, email, password } = req.body;
@@ -139,27 +168,6 @@ app.post("/register", redirectHome, (req, res) => {
   res.redirect("/");
 });
 
-app.post("/signin", redirectHome, (req, res) => {
-  const { email, password } = req.body;
-
-  console.log(req.body);
-  console.log(email, password);
-  console.log(users[0].email, users[0].password);
-
-  if (email && password) {
-    const user = users.find(
-      (el) => el.email === email && el.password === password
-    );
-    if (user) {
-      req.session.userID = user.id;
-      console.log("userID =" + req.session.userID);
-      return res.redirect("/home");
-    }
-  }
-
-  res.redirect("/");
-});
-
 app.post("/signout", redirectLogin, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -174,7 +182,7 @@ app.post("/signout", redirectLogin, (req, res) => {
 
 app.use((req, res) => {
   res.status(404);
-  renderer(res,req, "404");
+  renderer(req, res, "404");
 });
 
 // Listener
