@@ -170,3 +170,8 @@ section .container.active .signinBx .imgBx {
     width: 100%;
   }
 }
+
+.auth-text{
+  font-size: smaller;
+  color: red;
+}

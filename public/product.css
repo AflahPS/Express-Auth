@@ -1,5 +1,7 @@
 .carousel-item img{
   margin: auto;
+  height: 25rem;
+
 }
 
 .prod-buttons{
@@ -14,6 +16,15 @@
   background-color: rgba(70, 66, 66, 0.356);
 }
 
+.carousel {
+  margin : 3rem 0;
+
+}
+
+.description{
+  max-width: 36rem;
+}
+
 body{
-  background-color: rgb(230, 205, 68);
+  background-color: #f7f4f4;
 }

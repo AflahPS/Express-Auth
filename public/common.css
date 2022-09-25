@@ -26,7 +26,7 @@ body {
 
 .navig {
   background-color: #f7f4f4;
-  box-shadow: 3px 3px rgb(168, 168, 168);
+  box-shadow: 3px 3px rgba(213, 213, 213, 0.544);
   width: 100%;
   
 }

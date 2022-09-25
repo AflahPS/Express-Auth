@@ -16,6 +16,11 @@
                 <input type="email" name="email" placeholder="Email" />
                 <input type="password" name="password" placeholder="Password" />
                 <input type="submit" value="Login" />
+                <% if (message=== 'Wrong Email/Password !' ){ %>
+                  <p class="auth-text"><%= message %> </p>
+                  <% } %> 
+                
+
                 <p class="signup">
                   Don't have an account ?
                   <a href="#" onclick="toggleForm();">Sign Up.</a>

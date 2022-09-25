@@ -10,6 +10,8 @@ app.set("view engine", "ejs");
 const productsJson = fs.readFileSync("./JSON/new.json");
 const productsData = JSON.parse(productsJson);
 let PID = null;
+let message = null;
+
 // Database
 const users = [
   { id: 1, name: "admin", email: "admin@brand.com", password: "123456" },
@@ -24,15 +26,16 @@ function renderer(req, res, route) {
     { path: "/products", title: "PRODUCTS", style: "/products.css" },
     { path: "/about", title: "ABOUT", style: "/about.css" },
   ];
-
   const renderObject = {
     style: `/${route}.css`,
     title: `${route[0].toUpperCase() + route.slice(1)}`,
     nav,
     PID,
+    message,
     user: users[req.session.userID - 1],
     productsData,
   };
+  cacheClear(res);
   res.render(route, renderObject);
 }
 
@@ -66,11 +69,8 @@ const sessId = "sid";
 
 // Middlewares
 app.use(morgan("dev"));
-
 app.use(express.json());
-
 app.use(express.urlencoded());
-
 app.use(
   session({
     name: sessId,
@@ -88,9 +88,7 @@ app.use(express.static(__dirname + "/public"));
 // Routers-Getters
 
 app.get("/", (req, res) => {
-  res.status(200);
   const { userID } = req.session;
-
   if (!userID) {
     renderer(req, res, "signin");
   } else {
@@ -99,32 +97,26 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", redirectLogin, (req, res) => {
-  cacheClear(res);
-  res.status(200);
+  message=null
   renderer(req, res, "home");
 });
 
 app.get("/products", redirectLogin, (req, res) => {
-  cacheClear(res);
-  res.status(200);
   renderer(req, res, "products");
 });
 
 app.get("/about", redirectLogin, (req, res) => {
-  cacheClear(res);
-  res.status(200);
   renderer(req, res, "about");
 });
 
 app.get("/product/:id", redirectLogin, (req, res) => {
-  cacheClear(res);
-  res.status(200);
   PID = req.params.id * 1;
   const product = productsData.products.find((el) => el.id === PID);
   if (product) {
     return renderer(req, res, "product");
   }
-  res.redirect("/home");
+  message='Product not found in the database !'
+  res.redirect("/404");
 });
 
 // Routers-Posters
@@ -141,7 +133,7 @@ app.post("/signin", redirectHome, (req, res) => {
       return res.redirect("/home");
     }
   }
-
+  message = 'Wrong Email/Password !'
   res.redirect("/");
 });
 
@@ -181,7 +173,6 @@ app.post("/signout", redirectLogin, (req, res) => {
 // 404-Error
 
 app.use((req, res) => {
-  res.status(404);
   renderer(req, res, "404");
 });
 
