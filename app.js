@@ -97,7 +97,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/home", redirectLogin, (req, res) => {
-  message=null
+  message = null;
   renderer(req, res, "home");
 });
 
@@ -115,7 +115,7 @@ app.get("/product/:id", redirectLogin, (req, res) => {
   if (product) {
     return renderer(req, res, "product");
   }
-  message='Product not found in the database !'
+  message = "Product not found in the database !";
   res.redirect("/404");
 });
 
@@ -133,30 +133,34 @@ app.post("/signin", redirectHome, (req, res) => {
       return res.redirect("/home");
     }
   }
-  message = 'Wrong Email/Password !'
+  message = "Wrong Email/Password !";
   res.redirect("/");
 });
 
 app.post("/register", redirectHome, (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, confirmPassword } = req.body;
+  if (password === confirmPassword) {
+    // const exist = users.some((el) => {
+    //   el.email === email;
+    // });
 
-  const exist = users.some((el) => {
-    el.email === email;
-  });
-
-  if (!exist) {
-    const user = {
-      id: users.length + 1,
-      name,
-      password,
-      email,
-    };
-    users.push(user);
-
-    req.session.userID = user.id;
-    return res.redirect("/home");
+    if (
+      users.some((el) => {
+        el.email !== email;
+      })
+    ) {
+      const user = {
+        id: users.length + 1,
+        name,
+        password,
+        email,
+      };
+      users.push(user);
+      req.session.userID = user.id;
+      return res.redirect("/home");
+    }
   }
-
+  message = "Re-entered password is wrong !!";
   res.redirect("/");
 });
 
