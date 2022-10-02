@@ -21,32 +21,12 @@
                   <% } %> 
                 <p class="signup">
                   Don't have an account ?
-                  <a href="#" onclick="toggleForm();">Sign Up.</a>
+                  <a href="/register" >Sign Up.</a>
                 </p>
               </form>
             </div>
           </div>
- 
-          <div class="user signupBx">
-            <div class="formBx">
-              <form action="/register" method="post">
-                <h2>Create an account</h2>
-                <input type="text" name="name" placeholder="Username" />
-                <input type="email" name="email" placeholder="Email Address" />
-                <input type="password" name="password" id="password" placeholder="Create Password" />
-                <input type="password" name="confirmPassword" id="confirm-password" placeholder="Confirm Password" />
-                <input type="submit" name="submit" value="Sign Up" />
-                <% if (message=== "Re-entered password is wrong !!" ){ %>
-                  <p class="auth-text"><%= message %> </p>
-                  <% } %> 
-                <p class="signup">
-                  Already have an account ?
-                  <a href="#" onclick="toggleForm();">Sign in.</a>
-                </p>
-              </form>
-            </div>
-            <div class="imgBx"><img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img2.jpg" alt="" /></div>
-          </div>
+         
         </div>
       </section>
     </div>

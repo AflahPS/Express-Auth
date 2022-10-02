@@ -3,6 +3,7 @@ const ejs = require("ejs");
 const morgan = require("morgan");
 const session = require("express-session");
 const fs = require("fs");
+const mongoose = require("mongoose");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -13,26 +14,82 @@ let PID = null;
 let message = null;
 
 // Database
-const users = [
-  { id: 1, name: "admin", email: "admin@brand.com", password: "123456" },
-  { id: 2, name: "boss", email: "boss@brand.com", password: "123456" },
-  { id: 3, name: "master", email: "master@brand.com", password: "123456" },
-];
+
+const DB = "mongodb://localhost:27017/first-express";
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+  })
+  .then((con) => {
+    console.log("Successfully connected to MongoDB");
+  });
+
+const userSchema = new mongoose.Schema({
+  id: {
+    type: Number,
+  },
+  name: {
+    type: String,
+    required: [true, "A user must have a name"],
+  },
+  password: {
+    type: Number,
+    required: [true, "A user must have a password"],
+  },
+  email: {
+    type: String,
+    required: [true, "A user must have a unique email"],
+    unique: true,
+  },
+});
+
+const User = mongoose.model("User", userSchema);
+
+async function addSaveUser(user) {
+  const testUser = new User(user);
+  await testUser
+    .save()
+    .then((doc) => {
+      console.log(doc);
+    })
+    .catch((err) => console.log("Error :" + err));
+}
+
+async function findUserByEmail(email) {
+  const user = await User.findOne({ email : email });
+  if (!user) {
+    return false;
+
+  } else if (user.email===email) {
+    return user;
+  }
+}
+
+async function findUserById(id) {
+  const user = await User.findOne({ id : id });
+  if (!user) {
+    return false;
+  } else {
+    return user._id;
+  }
+}
 
 // Handlers and functions declarations
-function renderer(req, res, route) {
+async function renderer(req, res, route) {
   const nav = [
     { path: "/home", title: "HOME", style: "/home.css" },
     { path: "/products", title: "PRODUCTS", style: "/products.css" },
     { path: "/about", title: "ABOUT", style: "/about.css" },
   ];
+
+  const user = await User.findById(req.session.userID)
   const renderObject = {
     style: `/${route}.css`,
     title: `${route[0].toUpperCase() + route.slice(1)}`,
     nav,
     PID,
     message,
-    user: users[req.session.userID - 1],
+    user,
     productsData,
   };
   cacheClear(res);
@@ -41,7 +98,7 @@ function renderer(req, res, route) {
 
 const redirectLogin = (req, res, next) => {
   if (!req.session.userID) {
-    res.redirect("/");
+    res.redirect("/signin");
   } else {
     next();
   }
@@ -87,16 +144,26 @@ app.use(express.static(__dirname + "/public"));
 
 // Routers-Getters
 
-app.get("/", (req, res) => {
+app.get("/signin", (req, res) => {
+
   const { userID } = req.session;
   if (!userID) {
     renderer(req, res, "signin");
   } else {
     renderer(req, res, "home");
   }
+  
+});
+app.get("/register", (req, res) => {
+  const { userID } = req.session;
+  if (!userID) {
+    renderer(req, res, "register");
+  } else {
+    renderer(req, res, "home");
+  }
 });
 
-app.get("/home", redirectLogin, (req, res) => {
+app.get("/home", redirectLogin,(req, res) => {
   message = null;
   renderer(req, res, "home");
 });
@@ -121,48 +188,44 @@ app.get("/product/:id", redirectLogin, (req, res) => {
 
 // Routers-Posters
 
-app.post("/signin", redirectHome, (req, res) => {
+app.post("/signin", redirectHome,async (req, res) => {
   const { email, password } = req.body;
 
   if (email && password) {
-    const user = users.find(
-      (el) => el.email === email && el.password === password
-    );
+    const user = await findUserByEmail(email);
     if (user) {
-      req.session.userID = user.id;
+      req.session.userID = user._id;
       return res.redirect("/home");
     }
   }
   message = "Wrong Email/Password !";
-  res.redirect("/");
+  res.redirect("/signin");
 });
 
-app.post("/register", redirectHome, (req, res) => {
+app.post("/register", redirectHome,async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
   if (password === confirmPassword) {
-    // const exist = users.some((el) => {
-    //   el.email === email;
-    // });
-
-    if (
-      users.some((el) => {
-        el.email !== email;
-      })
-    ) {
+    const extst = await findUserByEmail(email);
+    if (!extst) {
       const user = {
-        id: users.length + 1,
         name,
         password,
         email,
       };
-      users.push(user);
-      req.session.userID = user.id;
+      addSaveUser(user);
+      const newUser = await findUserByEmail(email)
+      req.session.userID = newUser._id;
       return res.redirect("/home");
+    } else {
+      message = "Email already used !!";
+      console.log("Email already used !!");
+      return res.redirect("/register");
     }
   }
   message = "Re-entered password is wrong !!";
-  res.redirect("/");
+  return res.redirect("/register");
 });
+
 
 app.post("/signout", redirectLogin, (req, res) => {
   req.session.destroy((err) => {
@@ -170,7 +233,7 @@ app.post("/signout", redirectLogin, (req, res) => {
       return res.redirect("/home");
     }
     res.clearCookie("sid");
-    res.redirect("/");
+    res.redirect("/signin");
   });
 });
 
