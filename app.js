@@ -212,7 +212,7 @@ app.post("/register", redirectHome,async (req, res) => {
         password,
         email,
       };
-      addSaveUser(user);
+      const savedUser = await addSaveUser(user);
       const newUser = await findUserByEmail(email)
       req.session.userID = newUser._id;
       return res.redirect("/home");
