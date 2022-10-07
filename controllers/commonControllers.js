@@ -1,4 +1,5 @@
-const User = require("./../models/common");
+const User = require("../models/userModel");
+const Admin = require("./../models/adminModel");
 const productReader = require("./productReader");
 
 let message = null;
@@ -17,10 +18,19 @@ exports.renderer = async function (req, res, route) {
     { path: "/about", title: "ABOUT", style: "/about.css" },
   ];
 
-  const message = productReader.message;
   const productsData = productReader.productsData;
+  const message = productReader.message;
   const PID = productReader.PID;
-  const user = await User.findById(req.session.userID);
+
+  let user, admin;
+  if (req.session?.userID) {
+    user = await User.findById(req.session.userID);
+  } else if (req.session?.adminID) {
+    admin = await Admin.findById(req.session.adminID);
+  }
+
+  let users = await User.getAllUsers();
+
   const renderObject = {
     style: `/${route}.css`,
     title: `${route[0].toUpperCase() + route.slice(1)}`,
@@ -28,6 +38,8 @@ exports.renderer = async function (req, res, route) {
     PID,
     message,
     user,
+    users,
+    admin,
     productsData,
   };
   cacheClear(res);
@@ -45,6 +57,22 @@ exports.redirectLogin = (req, res, next) => {
 exports.redirectHome = (req, res, next) => {
   if (req.session.userID) {
     res.redirect("/home");
+  } else {
+    next();
+  }
+};
+
+exports.redirectPanel = (req, res, next) => {
+  if (req.session.adminID) {
+    res.redirect("/admin/panel");
+  } else {
+    next();
+  }
+};
+
+exports.redirectAdminLogin = (req, res, next) => {
+  if (!req.session.adminID) {
+    res.redirect("/admin/signin");
   } else {
     next();
   }

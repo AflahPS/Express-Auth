@@ -19,27 +19,16 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const productSchema = new mongoose.Schema({
-  name: String,
-  price: String,
-  in_stock: Boolean,
-  brand: String,
-  description: String,
-  images: String,
-  gender: String
-})
-
 const User = mongoose.model("User", userSchema);
-const Product = mongoose.model("Product", productSchema);
 
-exports.findById = User.findById.bind(User)
+exports.findById = User.findById.bind(User);
 
 exports.addSaveUser = async function (user) {
   const testUser = new User(user);
   await testUser
     .save()
     .then((doc) => {
-      console.log(doc);
+      return doc;
     })
     .catch((err) => console.log("Error :" + err));
 };
@@ -50,5 +39,14 @@ exports.findUserByEmail = async function (email) {
     return false;
   } else if (user.email === email) {
     return user;
+  }
+};
+
+exports.getAllUsers = async function () {
+  try {
+    const users = await User.find({});
+    return users;
+  } catch (err) {
+    console.log(`Error at User.getAllUsers : ${err}`);
   }
 };

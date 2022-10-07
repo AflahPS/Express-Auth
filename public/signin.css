@@ -171,7 +171,3 @@ section .container.active .signinBx .imgBx {
   }
 }
 
-.auth-text{
-  font-size: smaller;
-  color: red;
-}

@@ -4,15 +4,21 @@ const morgan = require("morgan");
 const session = require("express-session");
 const mongoose = require("mongoose");
 
+// Routers
+
 const productsRouter = require("./routes/productsRoutes");
 const homeRouter = require("./routes/homeRouter");
-const userRouter = require("./routes/userRoutes");
 const aboutRouter = require("./routes/aboutRouter");
-
+const userRouter = require("./routes/userRoutes");
+const adminRouter = require('./routes/adminRouter')
 const commonController = require("./controllers/commonControllers");
+
+// APP and ENGINE
 
 const app = express();
 app.set("view engine", "ejs");
+
+// DATABASE
 
 const DB = "mongodb://localhost:27017/first-express";
 mongoose
@@ -48,12 +54,13 @@ app.use(
 );
 app.use(express.static(__dirname + "/public"));
 
-// Routers
+// Routes
 
-app.use("/user", userRouter);
-app.use("/products", productsRouter);
 app.use("/home", homeRouter);
 app.use("/about", aboutRouter);
+app.use("/products", productsRouter);
+app.use("/user", userRouter);
+app.use("/admin", adminRouter);
 
 // 404-Error
 

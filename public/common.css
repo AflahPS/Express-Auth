@@ -19,8 +19,9 @@ body {
 }
 
 
-.nav-txt:hover, 
-.navbar-nav:hover .nav-link.active:hover, .navbar-nav:hover .show>.nav-link:hover  {
+.nav-txt:hover,
+.navbar-nav:hover .nav-link.active:hover,
+.navbar-nav:hover .show > .nav-link:hover {
   color: rgb(160, 136, 0);
 }
 
@@ -28,10 +29,7 @@ body {
   background-color: #f7f4f4;
   box-shadow: 3px 3px rgba(213, 213, 213, 0.544);
   width: 100%;
-  
 }
-
-
 
 .hero {
   display: flex;
@@ -62,4 +60,13 @@ body {
 }
 .hero.row {
   flex-direction: row;
+}
+
+.auth-text {
+  font-size: smaller;
+  color: red;
+}
+
+.message-h2 {
+  color: green;
 }

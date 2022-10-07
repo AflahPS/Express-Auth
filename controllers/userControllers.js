@@ -1,7 +1,6 @@
 const commonController = require("./commonControllers");
 const productReader = require("./productReader");
-
-const User = require("./../models/common");
+const User = require("../models/userModel");
 
 exports.renderSignin = (req, res) => {
   const { userID } = req.session;
@@ -45,8 +44,7 @@ exports.validateRegister = async (req, res) => {
         password,
         email,
       };
-      await User.addSaveUser(user);
-      const newUser = await User.findUserByEmail(email);
+      const newUser = await User.addSaveUser(user);
       req.session.userID = newUser._id;
       return res.redirect("/home");
     } else {
@@ -67,3 +65,9 @@ exports.signOut = (req, res) => {
     res.redirect("/user/signin");
   });
 };
+
+exports.renderUserDash = (req, res) => {
+  commonController.renderer(req, res, "userDash");
+};
+
+
