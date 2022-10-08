@@ -42,6 +42,15 @@ exports.findUserByEmail = async function (email) {
   }
 };
 
+exports.findUserByName = async function (name) {
+  const user = await User.findOne({ name: name });
+  if (!user) {
+    return false;
+  } else {
+    return user;
+  }
+};
+
 exports.getAllUsers = async function () {
   try {
     const users = await User.find({});
@@ -50,3 +59,11 @@ exports.getAllUsers = async function () {
     console.log(`Error at User.getAllUsers : ${err}`);
   }
 };
+
+exports.deleteUserById = async function(id){
+  try{
+    await User.deleteOne({_id: id})
+  } catch(err){
+    console.log(`Error at User.deleteUser : ${err}`);
+  }
+}

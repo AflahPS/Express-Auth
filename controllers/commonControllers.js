@@ -1,8 +1,8 @@
 const User = require("../models/userModel");
 const Admin = require("./../models/adminModel");
+const Product = require("./../models/productModel")
 const productReader = require("./productReader");
-
-let message = null;
+const adminController = require('./adminControllers')
 
 const cacheClear = (res) => {
   res.header(
@@ -18,36 +18,45 @@ exports.renderer = async function (req, res, route) {
     { path: "/about", title: "ABOUT", style: "/about.css" },
   ];
 
-  const productsData = productReader.productsData;
-  const message = productReader.message;
-  const PID = productReader.PID;
+  // const productsData = productReader.productsData;
 
+  let users = await User.getAllUsers();
+  let products = await Product.getAllProducts();
+  
   let user, admin;
+
   if (req.session?.userID) {
-    user = await User.findById(req.session.userID);
-  } else if (req.session?.adminID) {
+    user = users.find(el=>
+      el._id==req.session.userID
+    )
+  } else if (adminController?.userID){
+    user = await User.findById(adminController.userID);
+  } else if (req.session?.adminID){
+    user = await Admin.findById(req.session.adminID);
+  }
+  if (req.session?.adminID) {
     admin = await Admin.findById(req.session.adminID);
   }
 
-  let users = await User.getAllUsers();
+  let message = productReader.message;
 
   const renderObject = {
     style: `/${route}.css`,
     title: `${route[0].toUpperCase() + route.slice(1)}`,
     nav,
-    PID,
+    PID: productReader.PID,
     message,
     user,
     users,
     admin,
-    productsData,
+    products,
   };
   cacheClear(res);
   res.render(route, renderObject);
 };
 
 exports.redirectLogin = (req, res, next) => {
-  if (!req.session.userID) {
+  if (!req.session.userID && !req.session.adminID) {
     res.redirect("/user/signin");
   } else {
     next();
@@ -55,7 +64,7 @@ exports.redirectLogin = (req, res, next) => {
 };
 
 exports.redirectHome = (req, res, next) => {
-  if (req.session.userID) {
+  if (req.session.userID || req.session.adminID) {
     res.redirect("/home");
   } else {
     next();

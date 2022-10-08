@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <%- include('./partials/head.ejs') %>
@@ -6,27 +7,66 @@
   <%- include('./partials/admin-nav.ejs') %>
   <div class="container-fluid main-cont py-5">
 
-    
+    <div class="container col-md-10" id="panel1">
 
-      <ul class="list-group">
+      <h2 class="text-center">PRODUCTS</h2>
 
-        <% productsData.products.forEach(el=>{ %>
-
-        <li class="list-group-item d-flex justify-content-between">
-
-          <a href="/product/<%= el._id %> " class="text-decoration-none text-dark"><%= el.title %></a>
-
-          <div class="btn-group">
-            <a href="#" class="btn btn-success">Edit</a>
-            <a href="#" class="btn btn-danger">Delete</a>
+        <form class="navbar-form" role="search" action="/admin/product/search" method="post">
+          <div class="form-group input-group col-md-8">
+            <input type="text" class="form-control" placeholder="Search products" name="title" autofocus>
+            
+              <button class="btn btn-info" type="submit">Search</button>
+            
           </div>
-        </li>
 
-        <% }) %>
+          <div class="create-button">
+            <a class="btn btn-primary my-3" href="admin/create-user/"> Create New Product</a>
+          </div>
+          
+        </form>
+  
 
-      </ul>
+      <div class="form-group col-md-12">
 
-      <%- include('./partials/footer.ejs') %>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="dropup">
+              <th>Thumbnail</th>
+              <th>Title</th>
+              <th>Brand<span class="caret"></span></th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Category</th>
+              
+
+              <th></th>
+              <th></th>
+              
+            </tr>
+          </thead>
+          <tbody>
+           
+              <% products.forEach(el=>{ %>
+                <tr>
+              <td><img style="max-height:5rem ; max-width: 7rem;" src="<%= el.thumbnail %>" alt=""></td>
+              <td><%= el.title %> </td>
+              <td><%= el.brand %></td>
+              <td><%= el.price * 80 %></td>
+              <td><%= el.stock %></td>
+              <td><%= el.category %></td>
+              
+              <td>
+                <a href="/admin/edit-product/<%= el._id %>" class="btn btn-success">Edit</a>
+              </td>
+              <td>
+                <a href="/admin/delete-product/<%= el._id %>" class="btn btn-danger">Delete</a>
+              </td>
+            </tr>
+
+              <% }) %>
+          
+          </tbody>
+        </table>
 </body>
 
 </html>

@@ -36,7 +36,7 @@ exports.validateSignin = async (req, res) => {
 
 exports.validateRegister = async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
-  if (password === confirmPassword) {
+  if (password === confirmPassword && password !== '') {
     const extst = await User.findUserByEmail(email);
     if (!extst) {
       const user = {

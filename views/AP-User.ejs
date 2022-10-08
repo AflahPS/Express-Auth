@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <%- include('./partials/admin-nav.ejs') %>
+  <div class="container-fluid main-cont py-5">
+
+    <div class="container col-md-8" id="panel1">
+      <h2>User Accounts</h2>
+      <form class="navbar-form" role="search" action="/admin/users/search" method="post">
+        <div class="form-group input-group col-md-8">
+          <input type="text" class="form-control" placeholder="Search users" name="name" autofocus>
+          <button class="btn btn-info" type="submit">Search</button>
+        </div>
+        <div class="d-flex justify-content-around">
+          <div>
+            <p class="auth-text"><%= message %> </p>
+          </div>
+          <div class="create-button">
+            <a class="btn btn-primary my-3" href="admin/create-user/"> Create New Account</a>
+          </div>
+        </div>
+      </form>
+
+      <div class="form-group col-md-12">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="dropup">
+              <th>Name</th>
+              <th>Email<span class="caret"></span></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td><%= user.name %> </td>
+              <td><%= user.email %></td>
+              <td>
+                <a href="/admin/edit-user/<%= user._id %>" class="btn btn-success">Edit</a>
+              </td>
+              <td>
+                <a href="/admin/delete-user/<%= user._id %>" class="btn btn-danger">Delete</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+</body>
+
+</html>
