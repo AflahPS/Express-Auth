@@ -43,10 +43,19 @@ router
 router
   .route("/create-user")
   .get(commonController.redirectAdminLogin, adminController.renderCreateUser)
-  .post(commonController.redirectAdminLogin, adminController.AdminValidateRegister)
+  .post(
+    commonController.redirectAdminLogin,
+    adminController.AdminValidateUserRegister
+  );
 
-router.route('/delete-user/:id').get(commonController.redirectAdminLogin, adminController.deleteUser)
+router
+  .route("/delete-user/:id")
+  .get(commonController.redirectAdminLogin, adminController.deleteUser);
 
+router
+  .route("/edit-user/:id")
+  .get(commonController.redirectAdminLogin, adminController.renderEditUser)
+  .post(commonController.redirectAdminLogin, adminController.editUser);
 
 // CRUD on Products
 
@@ -57,8 +66,29 @@ router
     adminController.renderAdminProducts
   );
 
-// router.route('/product').get(commonController.redirectAdminLogin, adminController.renderProduct);
+router
+  .route("/product/:id")
+  .get(commonController.redirectAdminLogin, adminController.renderProductById);
 
-// router.route('/products/search').post(commonController.redirectAdminLogin, adminController.renderUser);
+router
+  .route("/products/search")
+  .post(
+    commonController.redirectAdminLogin,
+    adminController.renderProductSearch
+  );
+
+router
+  .route("/delete-product/:id")
+  .get(commonController.redirectAdminLogin, adminController.deleteProduct);
+
+router
+  .route("/edit-product/:id")
+  .get(commonController.redirectAdminLogin, adminController.renderEditProduct)
+  .post(commonController.redirectAdminLogin, adminController.editProduct);
+
+router
+  .route("/create-product")
+  .get(commonController.redirectAdminLogin, adminController.renderCreateProduct)
+  .post(commonController.redirectAdminLogin, adminController.createProduct);
 
 module.exports = router;

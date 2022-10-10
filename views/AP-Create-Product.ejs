@@ -4,6 +4,58 @@
 
 <body>
   <%- include('./partials/admin-nav.ejs') %>
+
+  <div class="row my-3">
+    <form action="create-product" method="post">
+      <div class="col col-md-6 col-lg-10 m-auto text-secondary">
+        <h2 class="text-center text-danger">CREATE PRODUCT</h2>
+        <div class="mb-3">
+          <label class="form-label" for="title">Title :</label>
+          <input class="form-control" type="text" name="title" placeholder="Title"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="brand">Brand :</label>
+          <input class="form-control" type="text" name="brand" placeholder="Brand"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="description">Description :</label>
+          <input class="form-control" type="text" name="description" placeholder="Description"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="price">Price in USD :</label>
+          <input class="form-control" type="number" name="price" placeholder="Price in USD"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="discountPercentage">Discount Percentage :</label>
+          <input class="form-control" type="number" name="discountPercentage" placeholder="discountPercentage"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="stock">Stock :</label>
+          <input class="form-control" type="number" name="stock" placeholder="Stock"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="category">Category :</label>
+          <input class="form-control" type="text" name="category" placeholder="Category"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="thumbnail">Thumbnail :</label>
+          <input class="form-control" type="text" name="thumbnail" placeholder="Thumbnail" />
+        </div>
+
+        <div class="mb-3 text-center">
+          <input class="btn btn-outline-success btn-lg" type="submit" name="submit" value="Submit" />
+
+          <% if (message === "Entered password is wrong !!"){ %>
+          <p class="auth-text"><%= message %> </p>
+          <% } %>
+        </div>
+
+
+      </div>
+    </form>
+
+  </div>
+
   
 </body>
 

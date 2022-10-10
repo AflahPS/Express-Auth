@@ -3,11 +3,10 @@
 <%- include('./partials/head.ejs') %>
 
 <body>
-  <% const product = productsData.products.find(el=>el.id === PID) %>
 
   <div class="container-fluid main-cont">
     <%- include('./partials/nav.ejs') %>
-    
+
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
       <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -52,13 +51,13 @@
 
 
     </div>
-  
+
     <div class="prod-buttons d-flex justify-content-center mb-5">
       <button class="btn btn-outline-primary">BUY NOW</button>
       <button class="btn btn-outline-primary">ADD TO CART</button>
     </div>
 
-    
+
   </div>
   <%- include('./partials/footer.ejs') %>
 </body>

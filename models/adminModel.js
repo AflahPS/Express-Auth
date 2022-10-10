@@ -4,6 +4,7 @@ const adminSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "An admin must have a name"],
+    uppercase: true
   },
   password: {
     type: Number,
@@ -13,32 +14,40 @@ const adminSchema = new mongoose.Schema({
     type: String,
     required: [true, "An admin must have a unique email"],
     unique: true,
+    lowercase:true
   },
   post: {
     type: String,
-    required: [true, "Admin post should be added"]
+    required: [true, "Admin post should be added"],
+  },
+  createdAt: {
+    type: Date,
+    default: ()=> Date.now()
+  },
+  updatedAt:{
+    type: Date,
+    default: ()=> Date.now()
   }
 });
 
 const Admin = mongoose.model("Admin", adminSchema);
 
-exports.findById = Admin.findById.bind(Admin)
+exports.findById = Admin.findById.bind(Admin);
 
 exports.addSaveAdmin = async function (admin) {
-  const test = new Admin(admin);
-  await test
-    .save()
-    .then((doc) => {
-      console.log("Added successfully: "+ doc);
-    })
-    .catch((err) => console.log("Error :" + err));
+  try {
+    const newAdmin = await Admin.create(admin);
+    return newAdmin;
+  } catch (error) {
+    console.log("Error while savin admin to database (@adminModel) :" + error.message);
+  }
 };
 
 exports.findAdminByEmail = async function (email) {
-  const admin = await Admin.findOne({ email: email });
-  if (!admin) {
-    return false;
-  } else if (admin.email === email) {
-    return admin;
+  try {
+    const admin = await Admin.findOne({ email: email });
+    return admin ? admin : false;
+  } catch (error) {
+    console.log("Error in finding admin from database (@adminModel) :" + error.message);
   }
 };

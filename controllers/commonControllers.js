@@ -1,8 +1,8 @@
 const User = require("../models/userModel");
 const Admin = require("./../models/adminModel");
-const Product = require("./../models/productModel")
+const Product = require("./../models/productModel");
 const productReader = require("./productReader");
-const adminController = require('./adminControllers')
+const adminController = require("./adminControllers");
 
 const cacheClear = (res) => {
   res.header(
@@ -12,48 +12,72 @@ const cacheClear = (res) => {
 };
 
 exports.renderer = async function (req, res, route) {
+
+  // Data for user Nav-bar
+
   const nav = [
     { path: "/home", title: "HOME", style: "/home.css" },
     { path: "/products", title: "PRODUCTS", style: "/products.css" },
     { path: "/about", title: "ABOUT", style: "/about.css" },
   ];
-
-  // const productsData = productReader.productsData;
-
-  let users = await User.getAllUsers();
-  let products = await Product.getAllProducts();
   
-  let user, admin;
+  let user, admin, editUser;
 
+  // Getting user/admin data for user pages
+  
+  let users = await User.getAllUsers();
   if (req.session?.userID) {
-    user = users.find(el=>
-      el._id==req.session.userID
-    )
-  } else if (adminController?.userID){
+    user = users.find((el) => el._id == req.session.userID);
+  } else if (adminController?.userID) {
     user = await User.findById(adminController.userID);
-  } else if (req.session?.adminID){
+  } else if (req.session?.adminID) {
     user = await Admin.findById(req.session.adminID);
   }
+
+  // Getting products data for product pages
+
+  let products = await Product.getAllProducts();
+  let product = productReader.PID ? products.find(el=> el._id == productReader.PID) : null;
+
+
+  // Getting admin data for admin pages
+
   if (req.session?.adminID) {
     admin = await Admin.findById(req.session.adminID);
   }
 
+  // Getting user data for admin-edit-user page
+
+  if (adminController?.editUserId) {
+    editUser = await User.findById(adminController.editUserId);
+  }
+
+  // Special acknowledgemnt messsage for several pages
+
   let message = productReader.message;
+
+  // OBJECT to dynamically inject datas to the HTML document
 
   const renderObject = {
     style: `/${route}.css`,
-    title: `${route[0].toUpperCase() + route.slice(1)}`,
+    title: firstLetterUpper(route),
     nav,
-    PID: productReader.PID,
     message,
     user,
     users,
     admin,
+    product,
     products,
+    editUser,
   };
+
   cacheClear(res);
   res.render(route, renderObject);
 };
+
+function firstLetterUpper(word){
+  return `${word[0].toUpperCase() + word.slice(1)}`
+}
 
 exports.redirectLogin = (req, res, next) => {
   if (!req.session.userID && !req.session.adminID) {

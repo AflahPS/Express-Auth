@@ -7,22 +7,28 @@
   <%- include('./partials/admin-nav.ejs') %>
   <div class="container-fluid main-cont py-5">
 
-    <div class="container col-md-10" id="panel1">
+    <div class="container col-md-10">
+      <h1 class="text-center mb-5">PRODUCTS</h1>
+      <% if (message === "Product has been Deleted Successfully !!" || message === "New Product has been added Successfully !!" || "User has been Edited Successfully !!") { %>
+        <h3 class="text-success"><%= message %> </h3>
+        <% } %>
 
-      <h2 class="text-center">PRODUCTS</h2>
-
-        <form class="navbar-form" role="search" action="/admin/product/search" method="post">
+        <form class="navbar-form" role="search" action="/admin/products/search" method="post">
           <div class="form-group input-group col-md-8">
             <input type="text" class="form-control" placeholder="Search products" name="title" autofocus>
-            
               <button class="btn btn-info" type="submit">Search</button>
-            
           </div>
-
-          <div class="create-button">
-            <a class="btn btn-primary my-3" href="admin/create-user/"> Create New Product</a>
+          <div class="d-flex justify-content-between">
+            <div class="text-center">
+              <% if (message === "Insert a title !!" || message ===  "Sorry, Product not found !!") { %>
+              <p class="auth-text"><%= message %> </p>
+              <% } %>
+            </div>
+            <div class="create-button">
+              <a class="btn btn-primary my-3" href="create-product"> Create New Product</a>
+            </div>
           </div>
-          
+       
         </form>
   
 
@@ -49,7 +55,7 @@
               <% products.forEach(el=>{ %>
                 <tr>
               <td><img style="max-height:5rem ; max-width: 7rem;" src="<%= el.thumbnail %>" alt=""></td>
-              <td><%= el.title %> </td>
+              <td><a href="/admin/product/<%= el._id %> "><%= el.title %> </a></td>
               <td><%= el.brand %></td>
               <td><%= el.price * 80 %></td>
               <td><%= el.stock %></td>
@@ -59,7 +65,32 @@
                 <a href="/admin/edit-product/<%= el._id %>" class="btn btn-success">Edit</a>
               </td>
               <td>
-                <a href="/admin/delete-product/<%= el._id %>" class="btn btn-danger">Delete</a>
+                <a href="/admin/delete-product/<%= el._id %>" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</a>
+
+                <!-- Delete Modal -->
+
+                <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Deletion</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <span>
+                          <p>Do you want to delete the product: </p>
+                          <!-- <p>Name: <%= el.name %></p>
+                          <p>Email: <%= el.email %></p> -->
+                        </span>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </td>
             </tr>
 

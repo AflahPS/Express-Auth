@@ -3,12 +3,8 @@ const productReader = require("./productReader");
 const User = require("../models/userModel");
 
 exports.renderSignin = (req, res) => {
-  const { userID } = req.session;
-  if (!userID) {
-    commonController.renderer(req, res, "signin");
-  } else {
-    commonController.renderer(req, res, "home");
-  }
+  productReader.message=null;
+  commonController.renderer(req, res, "signin");
 };
 
 exports.renderRegister = (req, res) => {
@@ -22,16 +18,21 @@ exports.renderRegister = (req, res) => {
 
 exports.validateSignin = async (req, res) => {
   const { email, password } = req.body;
-
-  if (email && password) {
+  if (email !== '' && password !== '' ) {
     const user = await User.findUserByEmail(email);
-    if (user.password === Number(password)) {
-      req.session.userID = user._id;
-      return res.redirect("/home");
+    if(user){
+      if (user.password === Number(password)) {
+        req.session.userID = user._id;
+        return res.redirect("/home");
+      }
+      productReader.message = "Wrong Password !";
+      return commonController.renderer(req, res, "signin");
     }
+    productReader.message = "Wrong Email/Password !! , NB: Email is case sensitive";
+    return commonController.renderer(req, res, "signin");
   }
-  productReader.message = "Wrong Email/Password !";
-  res.redirect("/user/signin");
+  productReader.message = "Please enter both Email and Password !";
+  return commonController.renderer(req, res, "signin");
 };
 
 exports.validateRegister = async (req, res) => {

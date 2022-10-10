@@ -11,21 +11,31 @@ const productSchema = new mongoose.Schema({
   discountPercentage: Number,
   category: { type: String, required: [true, "Product must have a name"] },
   images: [String],
-  rating: Number
+  rating: Number,
+  createdAt: {
+    type: Date,
+    default: ()=> Date.now()
+  },
+  updatedAt:{
+    type: Date,
+    default: ()=> Date.now()
+  }
 });
 
 const Product = mongoose.model("Product", productSchema);
 
 exports.findById = Product.findById.bind(Product)
+exports.findByIdAndUpdate = Product.findByIdAndUpdate.bind(Product);
 
 exports.addSaveProduct = async function (product) {
-  const test = new Product(product);
-  await test
-    .save()
-    .then((doc) => {
-      return doc;
-    })
-    .catch((err) => console.log("Error :" + err));
+  try {
+    const test =await Product.create(product);
+    console.log(test);
+    return test;
+  } catch (error) {
+    console.log("Error Saving new Product :"+ error.message);
+  }
+   
 };
 
 exports.findProductByName = async function (name) {
@@ -39,4 +49,10 @@ exports.findProductByName = async function (name) {
 
 exports.getAllProducts = async () => await Product.find();
 
-
+exports.deleteProductById = async function (id) {
+  try {
+    await Product.deleteOne({ _id: id });
+  } catch (err) {
+    console.log(`Error at Product.deleteUser : ${err.message}`);
+  }
+};

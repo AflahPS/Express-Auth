@@ -14,7 +14,7 @@
         <div class="col-3 mb-3">
 
           <div class="card" >
-            <a href="/products/<%= el.id %>" class="card-link"><img src=<%= el.images[0] %> class="card-img-top card-img" alt="..."></a>
+            <a href="/products/<%= el._id %>" class="card-link"><img src=<%= el.images[0] %> class="card-img-top card-img" alt="..."></a>
             <div class="card-body">
               <h5 class="card-title"><%= el.title %> </h5>
               <p class="card-text"> <%= el.description %> </p>
@@ -25,7 +25,7 @@
 
             </ul>
             <div class="card-body">
-              <a href="/products/<%= el.id %>" class="card-link">Buy Now</a>
+              <a href="/products/<%= el._id %>" class="card-link">Buy Now</a>
               <a href="#" class="card-link">Add to Cart</a>
             </div>
           </div>

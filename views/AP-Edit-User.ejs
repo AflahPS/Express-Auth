@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <%- include('./partials/admin-nav.ejs') %>
+  <div class="container-fluid main-cont">
+
+    <div id="signin-modale">
+      <section>
+        <div class="container active" id="signin-container">
+
+
+          <div class="row my-3">
+            <form action="<%= editUser._id %> " method="post">
+              <div class="col col-md-6 col-lg-10 m-auto text-secondary">
+                
+                <h2 class="text-center text-danger">EDIT ACCOUNT</h2>
+
+                <div class="mb-3">
+                  <label for="ID" class="form-label">ID :</label>
+                  <input type="text" class="form-control" name="ID" readonly value=<%= editUser._id %> />
+                </div>
+                <div class="mb-3">
+                  <label for="name" class="form-label">Name :</label>
+                  <input type="text" class="form-control" name="name" placeholder="Name" value=<%= editUser.name %> />
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email Address :</label>
+                  <input type="email" class="form-control" name="email" placeholder="Email Address" value=<%= editUser.email %> />
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" class="form-control" name="password" readonly value=<%= editUser.password %> />
+                </div>
+                <div class="mb-3 text-center">
+                  <input class="btn btn-outline-success btn-lg" type="submit" name="submit" value="Submit" />
+
+                  <% if (message === "Entered password is wrong !!" || "Email already used !!"){ %>
+                  <p class="auth-text"><%= message %> </p>
+                  <% } %>
+
+                  <a href="/admin/delete-user/<%= editUser._id %>" class="btn btn-outline-danger btn-lg delete-button" data-bs-toggle="modal" data-bs-target="#delete-modal">Delete</a>
+
+                  <!-- Delete Modal -->
+  
+                  <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirm Deletion</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <span>
+                            <p>Do you want to delete the user: </p>
+                          
+                          </span>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                          <button type="button" class="btn btn-danger">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </form>
+
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+
+  </div>
+  <%- include('./partials/footer.ejs') %>
+</body>
+
+</html>

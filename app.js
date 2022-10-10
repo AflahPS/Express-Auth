@@ -57,6 +57,7 @@ app.use(express.static(__dirname + "/public"));
 // Routes
 
 app.use("/home", homeRouter);
+app.use("/", homeRouter);
 app.use("/about", aboutRouter);
 app.use("/products", productsRouter);
 app.use("/user", userRouter);

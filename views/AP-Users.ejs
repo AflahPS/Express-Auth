@@ -6,9 +6,9 @@
   <%- include('./partials/admin-nav.ejs') %>
   <div class="container-fluid main-cont py-5">
 
-    <div class="container col-md-8" id="panel1">
-      <h2>User Accounts</h2>
-      <% if (message === "User has been Deleted Successfully !!" || message === "New User has been added Successfully !!") { %>
+    <div class="container col-md-10" >
+      <h1 class="text-center mb-5">USER ACCOUNTS</h1>
+      <% if (message === "User has been Deleted Successfully !!" || message === "New User has been added Successfully !!" || "User has been Edited Successfully !!") { %>
       <h3 class="text-success"><%= message %> </h3>
       <% } %>
       <form class="navbar-form" action="/admin/users/search" method="post">
@@ -41,7 +41,7 @@
           </thead>
           <tbody>
             <% users.forEach(el=>{ %>
-            <tr>
+              <tr>
               <td><%= el.name %> </td>
               <td><%= el.email %></td>
               <td>
@@ -65,8 +65,8 @@
                       <div class="modal-body">
                         <span>
                           <p>Do you want to delete the user: </p>
-                          <p>Name: <%= el.name %></p>
-                          <p>Email: <%= el.email %></p>
+                          <!-- <p>Name: <%= el.name %></p>
+                          <p>Email: <%= el.email %></p> -->
                         </span>
                       </div>
                       <div class="modal-footer">
@@ -78,15 +78,15 @@
                 </div>
               </td>
 
-
-
             </tr>
-
-
-
-
-
             <% }) %>
+
+
+
+
+
+
+
           </tbody>
         </table>
 
