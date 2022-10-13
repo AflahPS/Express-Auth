@@ -1,12 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('./partials/head.ejs') %> 
-  <body>
-    <div class="container-fluid main-cont">
-    <%- include('./partials/nav.ejs') %>
-    <h1>Register</h1>
+<%- include('./partials/head.ejs') %>
 
-    <%- include('./partials/footer.ejs') %>
+<body>
+  <div class="container-fluid main-cont">
+
+    <div id="signin-modale">
+      <section>
+        <div class="container active" id="signin-container">
+          
+ 
+          <div class="user signupBx">
+            <div class="formBx">
+              <form action="/user/register" method="post">
+                <h2>Create an account</h2>
+                <input type="text" name="name" placeholder="Username" />
+                <input type="email" name="email" placeholder="Email Address" />
+                <input type="password" name="password" id="password" placeholder="Create Password" />
+                <input type="password" name="confirmPassword" id="confirm-password" placeholder="Confirm Password" />
+                <input type="submit" name="submit" value="Sign Up" />
+                <% if (message=== "Re-entered password is wrong !!" ){ %>
+                  <p class="auth-text"><%= message %> </p>
+                  <% } %> 
+                <p class="signup">
+                  Already have an account ?
+                  <a href="/user/signin">Sign in.</a>
+                </p>
+              </form>
+            </div>
+            <div class="imgBx"><img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img2.jpg" alt="" /></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  
   </div>
-  </body>
+  <%- include('./partials/footer.ejs') %>
+</body>
+
 </html>

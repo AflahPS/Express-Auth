@@ -1,0 +1,18 @@
+.card-img{
+  height: 18rem;
+  object-fit: cover;
+}
+
+.products-Head{
+  margin-top: 2rem;
+  
+}
+
+.card{
+  height: 100%;
+}
+
+/* .card-body {
+  flex-grow: 1;
+  flex-shrink: 0;
+} */

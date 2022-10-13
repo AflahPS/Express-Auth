@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+<body>
+  <%- include('./partials/admin-nav.ejs') %>
+  <div class="container-fluid main-cont">
+
+    <div id="signin-modale">
+      <section>
+        <div class="container active" id="signin-container">
+          
+ 
+          <div class="user signupBx">
+            <div class="formBx">
+              <form action="create-user" method="post">
+                <h2>Create an account</h2>
+                <input type="text" name="name" placeholder="Username" />
+                <input type="email" name="email" placeholder="Email Address" />
+                <input type="password" name="password" id="password" placeholder="Create Password" />
+                <input type="password" name="confirmPassword" id="confirm-password" placeholder="Confirm Password" />
+                <input type="submit" name="submit" value="Create User" />
+                <% if (message === "Re-entered password is wrong !!" || "Email already used !!"){ %>
+                  <p class="auth-text"><%= message %> </p>
+                  <% } %> 
+              </form> 
+              
+            </div>
+            <div class="imgBx"><img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img2.jpg" alt="" /></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  
+  </div>
+  <%- include('./partials/footer.ejs') %>
+</body>
+
+</html>

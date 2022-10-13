@@ -5,11 +5,44 @@
 <body>
   <div class="container-fluid main-cont">
     <%- include('./partials/nav.ejs') %>
-    <h1>Home</h1>
+    
 
 
-    <%- include('./partials/footer.ejs') %>
+    
+    <div class="hero hero-has-background" style="--background: url(https://i.ibb.co/ykZMbsR/home-bg.jpg); --overlay: #000a">
+      <h1>Hello <%= user.name %> !!</h1>
+      <p>Let's Get Started</p>
+    </div>
+    <div class="hero container">
+        <h2>This is Hello World</h2>
+        <p>I can use Lorem Ipsum but it's boring so I just made up word here, just assume it's an example of one-liner paragraph.</p>
+    </div>
+    <div class="hero row no-gutters">
+      <div class="col-md-6 hero">
+        <h2>Splendid Content</h2>
+        <p>This is a hero, but in split mode. Tweaked to work with responsive grid from Bootstrap.</p>
+      </div>
+      <div class="col-md-6 hero hero-has-background" style="--background: url(https://upload.wikimedia.org/wikipedia/commons/4/42/Shaqi_jrvej.jpg); --overlay: linear-gradient(#0148, #014)">Type whatever caption that comes up your mind speak best.</div>
+    </div>
+    <div class="hero row flex-md-row-reverse no-gutters">
+      <div class="col-md-6 hero">
+        <h2>Another Splendid Content</h2>
+        <p>This is a hero, but in split mode, and reversed, although still consistent with mobile view!</p>
+      </div>
+      <div class="col-md-6 hero hero-has-background" style="--background: url(https://upload.wikimedia.org/wikipedia/commons/4/42/Shaqi_jrvej.jpg); --overlay: linear-gradient(#4108, #410)">Type whatever another caption that comes up your mind speak best.</div>
+    </div>
+    <div class="hero row no-gutters">
+      <div class="col-md-6 hero">
+        <h2>Clean Splendid Content</h2>
+        <p>This is a hero, but in split mode and no weird caption, so just let the image speak</p>
+      </div>
+      <div class="col-md-6 hero hero-has-background" style="--background: url(https://upload.wikimedia.org/wikipedia/commons/4/42/Shaqi_jrvej.jpg);"></div>
+    </div>
+    
+
+    
   </div>
+  <%- include('./partials/footer.ejs') %>
 </body>
 
 </html>

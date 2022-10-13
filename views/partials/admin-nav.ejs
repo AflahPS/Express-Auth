@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navig">
+  <div class="container-fluid d-flex">
+    <div class="nav-lt">
+      <a class="navbar-brand nav-txt" href="/admin/panel">Brand</a>
+    </div>
+
+    <div class="nav-rt">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item ">
+            <a class="nav-txt nav-link active " aria-current="page" href="/admin/panel">DASHBOARD</a>
+          </li>
+
+          <li class="nav-item ">
+            <a class="nav-txt nav-link active " aria-current="page" href="/admin/users">EDIT USERS</a>
+          </li>
+
+          <li class="nav-item ">
+            <a class="nav-txt nav-link active " aria-current="page" href="/admin/products">EDIT PRODUCTS</a>
+          </li>
+          
+          <li class="nav-item ">
+            <a class="nav-txt nav-link active " aria-current="page" href="/home">USER HOME</a>
+          </li>
+
+        </ul>
+        <form action="/admin/signout" method="post">
+          <input class="btn btn-warning" type="submit" value="Log Out">
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>

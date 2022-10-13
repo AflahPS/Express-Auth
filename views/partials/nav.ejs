@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg bg-secondary">
+<nav class="navbar navbar-expand-lg navig">
   <div class="container-fluid d-flex">
     <div class="nav-lt">
-      <a class="navbar-brand" href="/home">Brand</a>
+      <a class="navbar-brand nav-txt" href="/home">Brand</a>
     </div>
 
     <div class="nav-rt">
@@ -11,19 +11,17 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-
           <% nav.forEach(obj=>{ %>
           <li class="nav-item ">
-            <a class="nav-link active" aria-current="page" href=<%=obj.path %>><%= obj.title %> </a>
+            <a class="nav-txt nav-link active " aria-current="page" href=<%=obj.path %>><%= obj.title %> </a>
           </li>
           <% }) %>
-          
-
 
         </ul>
-        <form action="/signout" method="post">
-          <input type="submit" value="Log Out">
+        <form action="/user/signout" method="post">
+          <input class="btn btn-warning" type="submit" value="Log Out">
         </form>
+        <a class="ms-1 text-decoration-none " style="height:100% ; width: 5px;" href="admin/panel">.</a>
       </div>
     </div>
   </div>
